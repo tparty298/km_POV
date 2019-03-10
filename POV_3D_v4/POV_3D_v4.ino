@@ -14,7 +14,7 @@ unsigned long diffMillis=1;
 double phVal=1;
 int rotInit=0;//if 1->rot init position
 ////////////////////
-double borderVal=1000;
+double borderVal=1022;
 int splitNum=6;
 ///////////////////
 
@@ -36,17 +36,19 @@ void setup() {
   for(int i=0;i<THICK*2;i++){
     p[i].setBrightness(BRIGHTNESS);
   }
+
   
   for(int i=0;i<THICK*2;i++){
     for(int j=0;j<NUMPIXELS;j++){
-      p[i].setPixelColor(j, p[i].Color(255,0,0));
+      p[i].setPixelColor(j, p[i].Color(0,0,0));
     }
     p[i].show();
   }
+  rotInit = 1;
 }
 
 void loop() {
-  /////ph
+  /////ph--------------------------------------------------------
   /*
   phVal = analogRead(A0);
   if(phVal<borderVal){
@@ -57,7 +59,9 @@ void loop() {
     rotInit=0;
   }
   */
-  /////
+  
+  /////-----------------------------------------------------------
+ 
 
   /*
   for(int i=0;i<THICK*2;i++){
@@ -71,32 +75,26 @@ void loop() {
   p[3].setPixelColor(0, p[3].Color(255,0,0));
   */
 
-  for(int i=0;i<THICK;i++){
-    p[i].show();
+  if(rotInit==1){//rotation angle 0
+    Serial.println(phVal);
+    for(int i=0;i<THICK*2;i++){
+      for(int j=0;j<NUMPIXELS;j++){
+        p[i].setPixelColor(j, p[i].Color(255,0,0));
+      }
+      p[i].show();
+    }
+    //rotInit = 2;
+  }else if(rotInit==0){
+    for(int i=0;i<THICK*2;i++){
+      for(int j=0;j<NUMPIXELS;j++){
+        p[i].setPixelColor(j, p[i].Color(0,0,0));
+      }
+      //p[i].show();
+    }
   }
 
-  
-  
+  for(int i=0; i<THICK*2; i++){
+    //p[i].show();
+  }
   //delay(50);
 }
-
-
-void CO(Adafruit_NeoPixel *p, int r,int g, int b){
-  for(int i=0;i<NUMPIXELS;i++){
-    p->setPixelColor(i, p->Color(r,g,b));
-  }
-  p->show();
-}
-
-void CO_1(Adafruit_NeoPixel *p,int which, int r,int g, int b){
-  p->setPixelColor(which, p->Color(r,g,b));
-  p->show();
-}
-
-void CO_multiple(Adafruit_NeoPixel *p,int startL, int endL, int r,int g, int b){
-  for(int i=startL;i<=endL;i++){
-    p->setPixelColor(i, p->Color(r,g,b));
-  }
-  p->show();
-}
-
