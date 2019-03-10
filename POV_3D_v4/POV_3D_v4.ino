@@ -13,16 +13,19 @@ unsigned long beforeRotateInitMillis=0;
 unsigned long diffMillis=1;
 double phVal=1;
 int rotInit=0;//if 1->rot init position
+int loopCount=0;
 ////////////////////
-double borderVal=1022;
+double borderVal=1000;
 int splitNum=6;
 ///////////////////
+int Pin;
 
 void setup() {
   Serial.begin(9600);
 
   for(int i=0;i<THICK*2;i++){
-    p[i]=Adafruit_NeoPixel(NUMPIXELS, PININIT+i, NEO_GRB + NEO_KHZ800);
+    Pin = PININIT + i;
+    p[i]=Adafruit_NeoPixel(NUMPIXELS, Pin, NEO_GRB + NEO_KHZ800);
   }
   
   for(int i=0;i<THICK*2;i++){
@@ -49,7 +52,6 @@ void setup() {
 
 void loop() {
   /////ph--------------------------------------------------------
-  /*
   phVal = analogRead(A0);
   if(phVal<borderVal){
     rotInit=1;
@@ -58,25 +60,14 @@ void loop() {
   }else{
     rotInit=0;
   }
-  */
   
   /////-----------------------------------------------------------
- 
+
+
 
   /*
-  for(int i=0;i<THICK*2;i++){
-    CO(&p[i],255,0,0);
-  }
-  */
-  /*
-  p[0].setPixelColor(0, p[0].Color(255,0,0));
-  p[1].setPixelColor(0, p[1].Color(255,0,0));
-  p[2].setPixelColor(0, p[2].Color(255,0,0));
-  p[3].setPixelColor(0, p[3].Color(255,0,0));
-  */
-
+  Serial.println(phVal);
   if(rotInit==1){//rotation angle 0
-    Serial.println(phVal);
     for(int i=0;i<THICK*2;i++){
       for(int j=0;j<NUMPIXELS;j++){
         p[i].setPixelColor(j, p[i].Color(255,0,0));
@@ -89,12 +80,68 @@ void loop() {
       for(int j=0;j<NUMPIXELS;j++){
         p[i].setPixelColor(j, p[i].Color(0,0,0));
       }
-      //p[i].show();
+      p[i].show();
     }
   }
+  */
 
-  for(int i=0; i<THICK*2; i++){
-    //p[i].show();
+  
+  /*
+  switch(loopCount%3){
+    case 0:
+      for(int i=0;i<THICK*2;i++){
+        for(int j=0;j<NUMPIXELS;j++){
+          p[i].setPixelColor(j, p[i].Color(255,0,0));
+        }
+      }
+      break;
+    case 1:
+      for(int i=0;i<THICK*2;i++){
+        for(int j=0;j<NUMPIXELS;j++){
+          p[i].setPixelColor(j, p[i].Color(0,255,0));
+        }
+      }
+      break;
+    case 2:
+      for(int i=0;i<THICK*2;i++){
+        for(int j=0;j<NUMPIXELS;j++){
+          p[i].setPixelColor(j, p[i].Color(0,0,255));
+        }
+      }
+      break;
   }
-  //delay(50);
+  */
+
+  
+    
+  //p[0].setPixelColor(0, p[0].Color(255,0,0));
+  int r = 255;
+  for(int i=0; i<THICK; i++){
+    for(int j=0; j<NUMPIXELS; j++){
+      if(i>=j){
+        p[i].setPixelColor(j, p[i].Color(0,0,r));
+      }else{
+        p[i].setPixelColor(j, p[i].Color(0,0,0));
+      }
+    }
+    p[i].show();
+  }
+  
+  for(int i=THICK*2; i>=THICK; i--){
+    for(int j=0; j<NUMPIXELS; j++){
+      p[i].setPixelColor(j, p[i].Color(0,0,0));
+    }
+    p[i].setPixelColor(7, p[i].Color(r,0,r));
+    p[i].show();
+  }
+  
+  
+  //////////////////
+  for(int i=THICK; i<THICK*2; i++){
+    p[i].show();
+  }
+  
+  loopCount++;
+  delay(2);
+  /////////////////
 }
