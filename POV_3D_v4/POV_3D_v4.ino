@@ -19,6 +19,7 @@ double borderVal=1000;
 int splitNum=6;
 ///////////////////
 int Pin;
+int r = 255, sp = 10;
 
 void setup() {
   Serial.begin(9600);
@@ -115,33 +116,57 @@ void loop() {
   
     
   //p[0].setPixelColor(0, p[0].Color(255,0,0));
-  int r = 255;
+  /*
+  r = r + sp;
+  if(r > 255){
+    sp = -20;
+  }else if(r < 0){
+    sp = 20;
+  }
+  */
+  
   for(int i=0; i<THICK; i++){
     for(int j=0; j<NUMPIXELS; j++){
-      if(i>=j){
-        p[i].setPixelColor(j, p[i].Color(0,0,r));
-      }else{
-        p[i].setPixelColor(j, p[i].Color(0,0,0));
+      if(i%2 == 1){
+        if(j<=i){
+          p[i].setPixelColor(j-1, p[i].Color(r,0,r));
+        }else{
+          p[i].setPixelColor(j-1, p[i].Color(0,0,0));
+        }
+      }else if(i%2 == 0){
+        if(j<=i){
+          p[i].setPixelColor(j, p[i].Color(r,0,r));
+        }else{
+          p[i].setPixelColor(j, p[i].Color(0,0,0));
+        }
       }
     }
     p[i].show();
   }
-  
-  for(int i=THICK*2; i>=THICK; i--){
-    for(int j=0; j<NUMPIXELS; j++){
-      p[i].setPixelColor(j, p[i].Color(0,0,0));
-    }
-    p[i].setPixelColor(7, p[i].Color(r,0,r));
-    p[i].show();
-  }
-  
-  
-  //////////////////
+
+
   for(int i=THICK; i<THICK*2; i++){
+    for(int j=0; j<NUMPIXELS; j++){
+      int l = i - THICK;
+      if(l%2 == 1){
+        if(j<=l){
+          p[i].setPixelColor(j-1, p[i].Color(0,r,0));
+        }else{
+          p[i].setPixelColor(j-1, p[i].Color(0,0,0));
+        }
+      }else if(l%2 == 0){
+        if(j<=l){
+          p[i].setPixelColor(j, p[i].Color(0,r,0));
+        }else{
+          p[i].setPixelColor(j, p[i].Color(0,0,0));
+        }
+      }
+    }
     p[i].show();
   }
+  //////////////////
   
   loopCount++;
-  delay(2);
+  //delay(2);
   /////////////////
 }
